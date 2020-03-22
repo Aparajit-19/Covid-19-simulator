@@ -7,25 +7,40 @@ import java.util.Random;
 
 public class Person {
 
+	/*
+	 * Max and min sizes (diameter) for the circle representing a person
+	 */
 	private static final int MAX_SIZE = 20;
 	private static final int MIN_SIZE = 10;
 
+	/*
+	 * Maximum speed, also minimum = -maximum = -3.5f
+	 */
 	private static final float MAX_SPEED = 3.5f;
 
-	private int size;
-	private int x, y;
-	private float xVel = 0, yVel = 0;
+	private int size; // diamater of the circle representing the person
+	private int x, y; // position
+	private float xVel = 0, yVel = 0; // velocity components
 
-	private float probSick = 0.50f;
-	private float recoveryTime = 10000.0f; // milliseconds
-	private long sickTime = -1l;
+	private float probSick = 0.90f; // probability of getting sick after a collision with a sick person
+	private float recoveryTime = 10000.0f; // time in milliseconds to recover from first sick
+	private long sickTime = -1l; // store the time the person has been sick
 
+	/*
+	 * possible states of a person
+	 */
 	private enum State {
 		HEALTHY, RECOVERED, SICK
 	}
 
-	private State state = State.HEALTHY;
+	private State state = State.HEALTHY; // state of the person, default healthy
 
+	/**
+	 * constructor
+	 * 
+	 * @param w -> width of the city
+	 * @param h -> height of the city
+	 */
 	public Person(int w, int h) {
 		Random rand = new Random();
 
@@ -50,7 +65,7 @@ public class Person {
 	}
 
 	/**
-	 * set the person sick
+	 * set the person to sick state, and start timer for recovery
 	 */
 	public void setSick() {
 		state = State.SICK;
@@ -106,6 +121,11 @@ public class Person {
 		return size;
 	}
 
+	/**
+	 * Draw the person
+	 * 
+	 * @param g -> tool to draw with
+	 */
 	public void draw(Graphics g) {
 		Color color;
 
@@ -133,9 +153,6 @@ public class Person {
 		x += xVel;
 		y += yVel;
 
-//			Rectangle me = new Rectangle(x, y, size, size);
-//			System.out.println(Math.ceil(getNextX()));
-//			System.out.println(Math.ceil(getNextY()));
 		Rectangle nextMe = new Rectangle((int) Math.ceil(getNextX()), (int) Math.ceil(getNextY()), size, size);
 
 		for (int i = 0; i < xWalls.length; i++)
@@ -146,22 +163,26 @@ public class Person {
 			if (nextMe.intersectsLine(0, yWalls[i], w, yWalls[i]))
 				yVel = -yVel;
 
+		// recovery testing
 		if (System.currentTimeMillis() - sickTime >= recoveryTime && state == State.SICK && sickTime > 0)
 			state = State.RECOVERED;
 
 	}
 
+	/**
+	 * test if collided
+	 * 
+	 * @param p, the person to test the collision with
+	 * @return true if collided with the other person, false if otherwise
+	 */
 	public boolean collided(Person p) {
-		double dist;
-
-		dist = Math.sqrt(Math.pow(getNextX() - p.getNextX(), 2) + Math.pow(getNextY() - p.getNextY(), 2));
-//		dist = Math.sqrt(Math.pow(x - p.getNextX(), 2) + Math.pow(x - p.getNextY(), 2));
+		double dist = Math.sqrt(Math.pow(getNextX() - p.getNextX(), 2) + Math.pow(getNextY() - p.getNextY(), 2));
 
 		boolean collided = (dist < size / 2.0 + p.getSize() / 2.0);
 
 		if (collided && p.getState() == State.SICK && state == State.HEALTHY)
 			if (Math.random() < probSick)
-				setSick();
+				setSick(); // make sick
 
 		return collided;
 	}

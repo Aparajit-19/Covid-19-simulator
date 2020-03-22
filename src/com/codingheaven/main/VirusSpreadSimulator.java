@@ -19,15 +19,19 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
-	public final static int WIDTH = 1000;
-	public final static int HEIGHT = WIDTH * 9 / 16; // 16:9 aspect ratio
+	public final static int WIDTH = 1000; // width of canvas
+	public final static int HEIGHT = WIDTH * 9 / 16; // 16:9 aspect ratio canvas
 
 	public boolean running = false; // true if the game is running
 	private Thread gameThread; // thread where the game is updated AND drawn (single thread game)
 
-	public boolean startAnimation = true;
-	Location city;
+	// game objects
 
+	Location city; // the city in which we monitor the population and spread of the virus
+
+	/**
+	 * Constructor
+	 */
 	public VirusSpreadSimulator() {
 
 		canvasSetup();
@@ -77,13 +81,12 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 
 				if (code == KeyEvent.VK_R)
 					initialize();
-				else if (code == KeyEvent.VK_SPACE)
-					startAnimation = !startAnimation;
 
 			}
 
 		});
 
+		// refresh size of city when this canvas changes size
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent componentEvent) {
 				city.setSize(getWidth(), getHeight());
@@ -98,7 +101,7 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// I have a full video explaining this game loop on my channel Coding Heaven
+		// I have a full video explaining this game loop on my YouTube channel Coding Heaven
 
 		this.requestFocus();
 		// game timer
@@ -150,8 +153,8 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 		gameThread = new Thread(this);
 		/*
 		 * since "this" is the "Game" Class you are in right now and it implements the
-		 * Runnable Interface we can give it to a thread constructor. That thread with
-		 * call it's "run" method which this class inherited (it's directly above)
+		 * Runnable Interface we can give it to a thread constructor. That thread will
+		 * call the "run" method which this class inherited (it's directly above)
 		 */
 		gameThread.start(); // start thread
 		running = true;
@@ -170,7 +173,7 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 	}
 
 	/**
-	 * draw the back and all the objects
+	 * draw the background and all the objects
 	 */
 	public void render() {
 		// Initialize drawing tools first before drawing
@@ -181,7 +184,7 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 		if (buffer == null) { // if it does not exist, we can't draw! So create it please
 			this.createBufferStrategy(3); // Creating a Triple Buffer
 			/*
-			 * triple buffering basically means we have 3 different canvases this is used to
+			 * triple buffering basically means we have 3 different canvases. this is used to
 			 * improve performance but the drawbacks are the more buffers, the more memory
 			 * needed so if you get like a memory error or something, put 2 instead of 3.
 			 * 
@@ -221,17 +224,17 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 
 	/**
 	 * update settings and move all objects
-	 * 
-	 * @param dt
 	 */
 	public void update() {
 
-		if (startAnimation)
-			city.update();
+		city.update();
 
 	}
 
 	/**
+	 * 
+	 * Main function, creates the canvas 
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
