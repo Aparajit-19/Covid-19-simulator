@@ -6,22 +6,28 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
+/**
+ * a location, like a city or a house or a town
+ * 
+ * @author Zayed
+ *
+ */
 public class Location {
 
-	private static final int pSIZE = 150; // population size (number of people in the city)
+	private final int pSIZE = 75; // population size (number of people in the city)
 	private int width, height; // dimensions of the city
 
 	private Person[] population; // data structure containing all the people and their data
 
-	private boolean quarantine = true; // with walls or no?
+	private boolean quarantine = false; // with walls or no?
 	private int[] xWalls; // all the x boundaries
 	private int[] yWalls; // all the y boundaries
 
 	/**
 	 * Constructor
 	 * 
-	 * @param w -> width of the city
-	 * @param h -> height of the city
+	 * @param w - width of the city
+	 * @param h - height of the city
 	 */
 	public Location(int w, int h) {
 		setSize(w, h);
@@ -38,8 +44,8 @@ public class Location {
 	/**
 	 * set the size of the city
 	 * 
-	 * @param w -> width of the city
-	 * @param h -> height of the city
+	 * @param w - width of the city
+	 * @param h - height of the city
 	 */
 	public void setSize(int w, int h) {
 		width = w;
@@ -49,35 +55,35 @@ public class Location {
 	/**
 	 * setup the walls of the city
 	 * 
-	 * @param w -> width of the city
-	 * @param h -> height of the city
+	 * @param w - width of the city
+	 * @param h - height of the city
 	 */
 	private void setWalls(int w, int h) {
 
 		if (quarantine) {
 			xWalls = new int[6];
 			xWalls[0] = 0;
-			xWalls[1] = width / 5;
-			xWalls[2] = width / 4;
-			xWalls[3] = width / 3;
-			xWalls[4] = width / 2;
-			xWalls[5] = width;
+			xWalls[1] = w / 5;
+			xWalls[2] = w / 4;
+			xWalls[3] = w / 3;
+			xWalls[4] = w / 2;
+			xWalls[5] = w;
 
 			yWalls = new int[6];
 			yWalls[0] = 0;
-			yWalls[1] = height / 5;
-			yWalls[2] = height / 4;
-			yWalls[3] = height / 3;
-			yWalls[4] = height / 2;
-			yWalls[5] = height;
+			yWalls[1] = h / 5;
+			yWalls[2] = h / 4;
+			yWalls[3] = h / 3;
+			yWalls[4] = h / 2;
+			yWalls[5] = h;
 		} else {
 			xWalls = new int[2];
 			xWalls[0] = 0;
-			xWalls[1] = width;
+			xWalls[1] = w;
 
 			yWalls = new int[2];
 			yWalls[0] = 0;
-			yWalls[1] = height;
+			yWalls[1] = h;
 		}
 
 	}
@@ -85,7 +91,7 @@ public class Location {
 	/**
 	 * Draw the city
 	 * 
-	 * @param g -> tool to draw with
+	 * @param g - tool to draw with
 	 */
 	public void draw(Graphics g) {
 		drawWalls(g);
@@ -99,7 +105,7 @@ public class Location {
 	/**
 	 * Draw all the walls
 	 * 
-	 * @param g -> tool used to draw with
+	 * @param g - tool used to draw with
 	 */
 	private void drawWalls(Graphics g) {
 		// Dotted lines

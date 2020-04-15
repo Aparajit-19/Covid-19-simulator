@@ -12,6 +12,8 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 /**
+ * the simulator
+ * 
  * @author Zayed
  *
  */
@@ -19,7 +21,7 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
-	public final static int WIDTH = 1000; // width of canvas
+	public final static int WIDTH = 1500; // width of canvas
 	public final static int HEIGHT = WIDTH * 9 / 16; // 16:9 aspect ratio canvas
 
 	public boolean running = false; // true if the game is running
@@ -70,8 +72,6 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 	 */
 	private void canvasSetup() {
 		this.setSize(new Dimension(WIDTH, HEIGHT));
-//		this.setMaximumSize(new Dimension(WIDTH, HEIGHT));
-//		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 
 		this.addKeyListener(new KeyAdapter() {
 
@@ -89,7 +89,8 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 		// refresh size of city when this canvas changes size
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent componentEvent) {
-				city.setSize(getWidth(), getHeight());
+//				city.setSize(getWidth(), getHeight());
+				initialize();
 			}
 		});
 
@@ -101,7 +102,7 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// I have a full video explaining this game loop on my YouTube channel Coding Heaven
+		// Full video explaining this game loop on my YouTube channel Coding Heaven
 
 		this.requestFocus();
 		// game timer
@@ -129,7 +130,7 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 				uDeltaTime--;
 			}
 
-			while (fDeltaTime >= 1) {
+			if (fDeltaTime >= 1) {
 				render();
 				frames++;
 				fDeltaTime--;
@@ -184,9 +185,10 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 		if (buffer == null) { // if it does not exist, we can't draw! So create it please
 			this.createBufferStrategy(3); // Creating a Triple Buffer
 			/*
-			 * triple buffering basically means we have 3 different canvases. this is used to
-			 * improve performance but the drawbacks are the more buffers, the more memory
-			 * needed so if you get like a memory error or something, put 2 instead of 3.
+			 * triple buffering basically means we have 3 different canvases. this is used
+			 * to improve performance but the drawbacks are the more buffers, the more
+			 * memory needed so if you get like a memory error or something, put 2 instead
+			 * of 3.
 			 * 
 			 * BufferStrategy:
 			 * https://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferStrategy.html
@@ -216,6 +218,11 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 
 	}
 
+	/**
+	 * draw the background
+	 * 
+	 * @param g - tool to draw
+	 */
 	private void drawBackground(Graphics g) {
 		// black background
 		g.setColor(Color.black);
@@ -233,7 +240,7 @@ public class VirusSpreadSimulator extends Canvas implements Runnable {
 
 	/**
 	 * 
-	 * Main function, creates the canvas 
+	 * Main function, creates the canvas
 	 * 
 	 * @param args
 	 */

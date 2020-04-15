@@ -5,6 +5,12 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 
+/**
+ * a person living at the location
+ * 
+ * @author Zayed
+ *
+ */
 public class Person {
 
 	/*
@@ -16,9 +22,9 @@ public class Person {
 	/*
 	 * Maximum speed, also minimum = -maximum = -3.5f
 	 */
-	private static final float MAX_SPEED = 3.5f;
+	private static final float MAX_SPEED = 4.5f;
 
-	private int size; // diamater of the circle representing the person
+	private int size; // diameter of the circle representing the person
 	private int x, y; // position
 	private float xVel = 0, yVel = 0; // velocity components
 
@@ -38,8 +44,8 @@ public class Person {
 	/**
 	 * constructor
 	 * 
-	 * @param w -> width of the city
-	 * @param h -> height of the city
+	 * @param w - width of the city
+	 * @param h - height of the city
 	 */
 	public Person(int w, int h) {
 		Random rand = new Random();
@@ -80,7 +86,7 @@ public class Person {
 	}
 
 	/**
-	 * @param xVel the xVel to set
+	 * @param xVel - the xVel to set
 	 */
 	public void setxVel(float xVel) {
 		this.xVel = xVel;
@@ -94,7 +100,7 @@ public class Person {
 	}
 
 	/**
-	 * @param yVel the yVel to set
+	 * @param yVel - the yVel to set
 	 */
 	public void setyVel(float yVel) {
 		this.yVel = yVel;
@@ -124,7 +130,7 @@ public class Person {
 	/**
 	 * Draw the person
 	 * 
-	 * @param g -> tool to draw with
+	 * @param g - tool to draw with
 	 */
 	public void draw(Graphics g) {
 		Color color;
@@ -148,6 +154,14 @@ public class Person {
 		g.fillOval(x, y, size, size);
 	}
 
+	/**
+	 * updates the persons state and tests for collisions with other people or walls
+	 * 
+	 * @param xWalls - walls with equation x=k
+	 * @param yWalls - walls with equation y=k
+	 * @param w      - width of city
+	 * @param h      - height of city
+	 */
 	public void update(int[] xWalls, int[] yWalls, int w, int h) {
 
 		x += xVel;
@@ -172,7 +186,7 @@ public class Person {
 	/**
 	 * test if collided
 	 * 
-	 * @param p, the person to test the collision with
+	 * @param p - the person to test the collision with
 	 * @return true if collided with the other person, false if otherwise
 	 */
 	public boolean collided(Person p) {
